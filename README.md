@@ -27,8 +27,8 @@ Here's what you'll need to buy to use this project:
 * [Elegoo's Smart Robot Car Kit v4.0](https://us.elegoo.com/products/elegoo-smart-robot-car-kit-v-4-0)
 * [Espressif ESP32-S3-EYE Development Board](https://www.aliexpress.us/item/3256803794751194.html)
 * [CP2102 Micro USB to UART Converter](https://www.amazon.com/HiLetgo-CP2102-Module-Converter-Replace/dp/B01N47LXRA) (It doesn't need to be this exact converter, and any serial device will work so long as it is compatible with the drivers above)
-* [JST XH to Dupont Connector Kit](https://www.amazon.com/Kidisoii-Dupont2-54-Connector-Pre-Crimped-Compatible/dp/B0CMCN9CXD/135-4941321-1839956) - This is so you can fabricate a cable that will connect the UART port on the Robot to the pins on the serial converter
-* [Micro USB to Micro USB OTG Cable](https://www.amazon.com/Micro-USB-Male-Data-Cable/dp/B0872GMD7V/)
+* [JST XH to Dupont Connector Kit](https://www.amazon.com/Kidisoii-Dupont2-54-Connector-Pre-Crimped-Compatible/dp/B0CMCN9CXD/135-4941321-1839956) - This is so you can fabricate a cable that will connect the UART port on the Robot to the pins on the serial converter.
+* [Micro USB to Micro USB OTG Cable](https://www.amazon.com/Micro-USB-Male-Data-Cable/dp/B0872GMD7V/) - To connect the ESP32-S3-EYE to the serial converter.
 * USB-A/USB-C to Micro USB Cable - You'll need this to flash the ESP32-S3-EYE and communicate with the serial adapter for testing. A USB-A to Micro USB cable should have come with your robot for our purposes.
 
 ## Getting Started
