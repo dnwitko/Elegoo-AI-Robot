@@ -20,9 +20,6 @@ dependencies:
       - if: "target == $TFLITE_USE_BSP_KALUGA"
 
   # MODIFICATION: Added dependencies seen below
-
-dependencies:
-  espressif/esp-idf-cxx: "^1.0.2-beta"
   espressif/usb_host_ftdi_vcp: "^2.0.0"
   espressif/usb_host_ch34x_vcp: "^2.0.0"
   espressif/usb_host_cp210x_vcp: "^2.0.0"
