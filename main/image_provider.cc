@@ -59,7 +59,7 @@ TfLiteStatus InitCamera() {
     MicroPrintf("Camera init failed\n");
     return kTfLiteError;
   }
-  // MicroPrintf("Camera Initialized\n");
+  MicroPrintf("Camera Initialized\n");
 #else
   ESP_LOGE(TAG, "Camera not supported for this device");
 #endif
@@ -111,7 +111,7 @@ TfLiteStatus GetImage(int image_width, int image_height, int channels, int8_t* i
     }
   }
 #else // DISPLAY_SUPPORT
-  // MicroPrintf("Image Captured\n");
+  MicroPrintf("Image Captured\n");
   // We have initialised camera to grayscale
   // Just quantize to int8_t
   for (int i = 0; i < image_width * image_height; i++) {

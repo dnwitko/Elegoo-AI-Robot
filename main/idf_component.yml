@@ -1,6 +1,6 @@
 dependencies:
   espressif/esp-tflite-micro:
-    version: "*"
+    version: "*" # MODIFICATION: Removed override so the project grabs this from Espressif
 
   espressif/esp32-camera: "~2.0.5"
 
@@ -18,6 +18,8 @@ dependencies:
     version: "3.*"
     rules:
       - if: "target == $TFLITE_USE_BSP_KALUGA"
+
+  # MODIFICATION: Added dependencies seen below
 
   espressif/usb_host_ftdi_vcp: "^2.0.0"
   espressif/usb_host_ch34x_vcp: "^2.0.0"

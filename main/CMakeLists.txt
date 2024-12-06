@@ -13,7 +13,7 @@ idf_component_register(
         "person_detect_model_data.cc"
         "app_camera_esp.c"
         "esp_cli.c"
-        "USBHostSerial.cpp"
+        "USBHostSerial.cpp" # MODIFICATION: Added USBHostSerial so the library compiles
 
     PRIV_REQUIRES console static_images spi_flash
     INCLUDE_DIRS "")

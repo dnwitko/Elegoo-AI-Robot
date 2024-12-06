@@ -2,11 +2,11 @@
 
 This project ties an existing TensorFlow Lite Micro AI Model to Elegoo's Smart Robot v4.0 using the ESP32-S3-EYE development board. It detects a face with the camera and makes the robot move accordingly.
 
-This project is based off existing code, primarily [bertmelis/USBHostSerial](https://github.com/bertmelis/USBHostSerial) and [espressif/esp-tflite-micro/examples/person_detection at master](https://github.com/espressif/esp-tflite-micro/tree/master/examples/person_detection). Both codebases have been modified to work with each other to grab data from the AI Model and pass the output over Serial.
+This project is based off existing code, primarily [bertmelis/USBHostSerial](https://github.com/bertmelis/USBHostSerial) and [espressif/esp-tflite-micro/examples/person_detection at master](https://github.com/espressif/esp-tflite-micro/tree/master/examples/person_detection). Both codebases have been modified to work with each other to grab data from the AI Model and pass the output over serial. These changes have been highlighted in the source code as comments with the word `MODIFICATION`.
 
 ## Software Dependencies
 
-All dependencies have been already added to [idf_component.yml](https://github.com/henrytran720/Elegoo-AI-Robot/blob/main/main/idf_component.yml) and should be automatically downloaded upon compile, but for reference here are all the dependencies this project requires:
+All dependencies have been already added to [idf_component.yml](https://github.com/henrytran720/Elegoo-AI-Robot/blob/main/main/idf_component.yml) and should be automatically downloaded upon compile, but for reference, here are all the dependencies this project requires:
 
 - [Espressif TinyUSB fork](https://components.espressif.com/components/espressif/tinyusb)
 - [Espressif's additions to TinyUSB](https://components.espressif.com/components/espressif/esp_tinyusb)
@@ -29,15 +29,15 @@ Here's what you'll need to buy to use this project:
 * [CP2102 Micro USB to UART Converter](https://www.amazon.com/HiLetgo-CP2102-Module-Converter-Replace/dp/B01N47LXRA) (It doesn't need to be this exact converter, and any serial device will work so long as it is compatible with the drivers above)
 * [JST XH to Dupont Connector Kit](https://www.amazon.com/Kidisoii-Dupont2-54-Connector-Pre-Crimped-Compatible/dp/B0CMCN9CXD/135-4941321-1839956) - This is so you can fabricate a cable that will connect the UART port on the Robot to the pins on the serial converter
 * [Micro USB to Micro USB OTG Cable](https://www.amazon.com/Micro-USB-Male-Data-Cable/dp/B0872GMD7V/)
-* USB-A/USB-C to Micro USB - You'll need this to flash the ESP32-S3-EYE and communicate with the serial adapter for testing
+* USB-A/USB-C to Micro USB Cable - You'll need this to flash the ESP32-S3-EYE and communicate with the serial adapter for testing. A USB-A to Micro USB cable should have come with your robot for our purposes.
 
 ## Getting Started
 
 ### The basics
 
-You will need to have the [ESP-IDF SDK](https://github.com/espressif/esp-idf) installed to get started. Installation instructions can be found [here.](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html#manual-installation) I used version 5.3 of the SDK, however this code should work for future versions.
+You will need to have the [ESP-IDF SDK](https://github.com/espressif/esp-idf) installed to get started. Installation instructions can be found [here.](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html#manual-installation) For this project I used version 5.3 of the SDK, however this code should work for future versions.
 
-The ESP32-S3-EYE should have come with [default firmware](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md#17-default-firmware-and-function-test) installed. Take the time to play around with it and test basic functions, such as the camera, LCD, and microphone. Once our code is flashed to the ESP32-S3, only the camera and certain LEDs will function.
+The ESP32-S3-EYE should have come with [default firmware](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md#17-default-firmware-and-function-test) installed. Take some time to play around with it and test its basic functions, such as the camera, LCD, and microphone. Once our code is flashed to the ESP32-S3, only the camera and certain LEDs will function.
 
 You may proceed to assembling the project once you've confirmed the ESP32-S3-EYE is fully functional.
 
@@ -45,7 +45,7 @@ You may proceed to assembling the project once you've confirmed the ESP32-S3-EYE
 
 You should already have the Elegoo Robot assembled. If not, please refer to the instruction booklets that came with your robot, or refer to the online instructions available at the end of this readme.
 
-You should also have the serial adapter, the JST XH to Dupont kit, and the Micro USB to Micro USB cable. If you still need to get those, please refer back to [Hardware Requirements](#Hardware Requirements).
+You should also have the serial adapter, the JST XH to Dupont kit, and the Micro USB to Micro USB cable. If you still need to get those, please refer back to [Hardware Requirements](<#Hardware Requirements>).
 
 Depending on the serial adapter you ordered, you may need to solder the pins that came with it to the serial adapter so the Dupont end of the cable can have a solid connection. Here is what it should look like:
 
@@ -143,6 +143,7 @@ Here is what the finished assembly should look like:
 
 * [Smart Robot Car v4.0 Manual & Source Code](https://download.elegoo.com/?t=RobotCarV4.0)
 * [Espressif ESP-IDF Programming Guide for the ESP32-S3-EYE](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/index.html)
+* [ESP32-S3-EYE Getting Started Guide](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
 
 ### Command Syntax
 

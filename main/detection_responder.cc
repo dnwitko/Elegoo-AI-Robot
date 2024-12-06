@@ -77,6 +77,6 @@ void RespondToDetection(float person_score, float no_person_score) {
     lv_canvas_set_buffer(camera_canvas, buf, IMG_WD, IMG_HT, LV_IMG_CF_TRUE_COLOR);
     bsp_display_unlock();
 #endif // DISPLAY_SUPPORT
-  // MicroPrintf("person score:%d%%, no person score %d%%",
-              // person_score_int, 100 - person_score_int);
+  MicroPrintf("person score:%d%%, no person score %d%%",
+              person_score_int, 100 - person_score_int);
 }
