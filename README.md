@@ -103,19 +103,7 @@ Speaking of selecting targets, we'll need to do that for this project. Run the f
 idf.py set-target esp32s3
 ```
 
-You should see two new folders: `build`, and `managed_components`. These folders will be necessary to compile this project.
-
-You will need to go into the IDF's menuconfig to change a certain setting.
-
-```bash
-idf.py menuconfig
-```
-
-You should then see a menu that looks like this:
-
-![](assets/ESP-IDF_menuconfig.png)
-
-Make sure `Compiler options -> Enable C++ exceptions` is enabled, then save and exit the menuconfig. You should now be ready to compile the project.
+You should now be ready to compile the project.
 
 ### Compiling
 
