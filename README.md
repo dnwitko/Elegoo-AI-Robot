@@ -66,10 +66,10 @@ Unplug the existing camera from the UART port on the robot, and connect our new 
 With the serial adapter connected, switch on the power to the robot. A red LED should be visible on the serial adapter, confirming that it is receiving power. You should now be able to communicate with the robot with a USB-A to Micro USB cable from your computer. Once connected, you should be able to issue commands such as:
 
 ```json
-// The syntax for these commands will be explained at the end of this readme.
-{'H':'Elegoo','N':1,'D1':0,'D2':50,'D3':1} // Commands the robot to turn its wheels clockwise with 50/255 power.
-{'H':'Elegoo','N':1,'D1':0,'D2':0,'D3':1} // Commands the robot to stop turning its wheels.
+{"H":"Elegoo","N":1,"D1":0,"D2":50,"D3":1}
+{"H":"Elegoo","N":1,"D1":0,"D2":0,"D3":1}
 ```
+The syntax for these commands will be explained at the end of this readme.
 
 If the robot does not respond to any of your commands, please make sure the switch on the robot's Arduino board located next to the USB-B port is set to `cam`, and try running the command again.
 
@@ -79,7 +79,7 @@ If the robot does not respond to any of your commands, please make sure the swit
 
 Once you know the camera module works, go ahead and clone this repository to a folder of your choosing:
 
-```sh
+```bash
 git clone https://github.com/henrytran720/Elegoo-AI-Robot.git
 cd Elegoo-AI-Robot
 ```
@@ -97,7 +97,7 @@ Usage: idf.py [OPTIONS] COMMAND1 [ARGS]... [COMMAND2 [ARGS]...]...
 
 Speaking of selecting targets, we'll need to do that for this project. Run the following command:
 
-```sh
+```bash
 # This will set up the project to be compiled for the ESP32-S3.
 # If you're compiling this project for another platform, please set the target appropriately for your environment.
 idf.py set-target esp32s3
@@ -107,7 +107,7 @@ You should see two new folders: `build`, and `managed_components`. These folders
 
 You will need to go into the IDF's menuconfig to change a certain setting.
 
-```sh
+```bash
 idf.py menuconfig
 ```
 
@@ -121,7 +121,7 @@ Make sure `Compiler options -> Enable C++ exceptions` is enabled, then save and 
 
 It's now time to flash our code. Make sure you have the ESP32-S3-EYE plugged in for this and run the following command:
 
-```sh
+```bash
 # Will flash the project to the ESP32-S3-EYE.
 # If the project hasn't been built or changes have been made, it will automatically be built before flashing.
 idf.py flash
