@@ -165,8 +165,8 @@ void loop() {
 
   // MODIFICATION
 
-  uint8_t data[] = '{"H":"Elegoo","N":1,"D1":0,"D2":50,"D3":1}'; // Person Detected Command
-  uint8_t data2[] = '{"H":"Elegoo","N":1,"D1":0,"D2":0,"D3":1}'; // No Person Command
+  uint8_t data[] = "{'H':'Elegoo','N':1,'D1':0,'D2':50,'D3':1}"; // Person Detected Command
+  uint8_t data2[] = "{'H':'Elegoo','N':1,'D1':0,'D2':0,'D3':1}"; // No Person Command
 
   // Check if person is detected and send the appropriate command over serial
   if (person_score_f >= 0.9) {
