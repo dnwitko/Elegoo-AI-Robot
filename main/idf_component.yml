@@ -30,4 +30,3 @@ dependencies:
   espressif/usb_host_cdc_acm: "^2.0.6"
   espressif/esp_tinyusb: "^1.4.5"
   espressif/tinyusb: "^0.17.0~1"
-  espressif/tinyusb: "^0.17.0~1"

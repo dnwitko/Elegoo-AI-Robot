@@ -10,13 +10,8 @@ SPDX-FileCopyrightText: 2022-2024 Espressif Systems (Shanghai) CO LTD
 SPDX-License-Identifier: CC0-1.0
 */
 
-<<<<<<< HEAD
 #include "USBHostSerial.h"
 #include <string.h> // MODIFICATION: Added this include so the project can compile with memcpy
-=======
-#include <USBHostSerial.h>
-#include <string.h>
->>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
 
 using namespace esp_usb;
 
@@ -72,12 +67,8 @@ bool USBHostSerial::begin(int baud, int stopbits, int parity, int databits) {
   _line_coding.bParityType = parity;
   _line_coding.bDataBits = databits;
 
-<<<<<<< HEAD
   // MODIFICATION: Changed _USBHostSerial_task to _usb_host_serial_task so this compiles
   if (xTaskCreate(_usb_host_serial_task, "usb_dev_lib", 4096, this, 1, &_usb_host_serial_task_handle) == pdTRUE) { 
-=======
-  if (xTaskCreate(_usb_host_serial_task, "usb_dev_lib", 4096, this, 1, &_usb_host_serial_task_handle) == pdTRUE) {
->>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
     return true;
   }
   return false;
@@ -96,11 +87,7 @@ std::size_t USBHostSerial::write(uint8_t data) {
 
 std::size_t USBHostSerial::write(uint8_t *data, std::size_t len) {
   std::size_t i = 0;
-<<<<<<< HEAD
   for (; i < len;) { // MODIFICATION: There was an extra i++ in the for loop, making the serial library transmit every other character. This has been removed.
-=======
-  for (; i < len;) {
->>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
     if (write(data[i]) == 1) {
       ++i;
     } else {
@@ -193,10 +180,7 @@ void USBHostSerial::_usb_lib_task(void *arg) {
   }
 }
 
-<<<<<<< HEAD
 // MODIFICATION: Changed _USBHostSerial_task to _usb_host_serial_task so this compiles
-=======
->>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
 void USBHostSerial::_usb_host_serial_task(void *arg) {
   USBHostSerial* thisInstance = static_cast<USBHostSerial*>(arg);
   while (1) {
