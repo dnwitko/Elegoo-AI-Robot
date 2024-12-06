@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 dependencies:
   espressif/esp-tflite-micro:
     version: "*" # MODIFICATION: Removed override so the project grabs this from Espressif
@@ -21,10 +22,33 @@ dependencies:
 
   # MODIFICATION: Added dependencies seen below
 
+=======
+## IDF Component Manager Manifest File
+dependencies:
+  espressif/esp-idf-cxx: "^1.0.2-beta"
+>>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
   espressif/usb_host_ftdi_vcp: "^2.0.0"
   espressif/usb_host_ch34x_vcp: "^2.0.0"
   espressif/usb_host_cp210x_vcp: "^2.0.0"
   espressif/usb_host_vcp: "^1.0.0~5"
   espressif/usb_host_cdc_acm: "^2.0.6"
   espressif/esp_tinyusb: "^1.4.5"
+<<<<<<< HEAD
   espressif/tinyusb: "^0.17.0~1"
+=======
+  espressif/tinyusb: "^0.17.0~1"
+  ## Required IDF version
+  idf:
+    version: ">=4.1.0"
+  # # Put list of dependencies here
+  # # For components maintained by Espressif:
+  # component: "~1.0.0"
+  # # For 3rd party components:
+  # username/component: ">=1.0.0,<2.0.0"
+  # username2/component2:
+  #   version: "~1.0.0"
+  #   # For transient dependencies `public` flag can be set.
+  #   # `public` flag doesn't have an effect dependencies of the `main` component.
+  #   # All dependencies of `main` are public by default.
+  #   public: true
+>>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5

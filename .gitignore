@@ -1,5 +1,6 @@
 build/
 managed_components/
+<<<<<<< HEAD
 .vscode/
 sdkconfig
 sdkconfig.old
@@ -12,3 +13,6 @@ dependencies.lock
 *.swp
 *.out
 *.lock
+=======
+.vscode/
+>>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5

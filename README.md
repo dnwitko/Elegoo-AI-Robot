@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Elegoo-AI-Robot
 
 This project ties an existing TensorFlow Lite Micro AI Model to Elegoo's Smart Robot v4.0 using the ESP32-S3-EYE development board. It detects a face with the camera and makes the robot move accordingly.
@@ -169,3 +170,6 @@ bertmelis' USBHostSerial code is covered by the MIT license.
 
 Modifications made to both codebases for this project are also covered by the included MIT license.
 
+=======
+Testing
+>>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5

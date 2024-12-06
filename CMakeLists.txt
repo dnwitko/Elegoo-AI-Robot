@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 cmake_minimum_required(VERSION 3.5)
 
 set(EXTRA_COMPONENT_DIRS static_images)
@@ -27,3 +28,11 @@ if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/sdkconfig)
 endif()
 
 project(person_detection)
+=======
+# The following lines of boilerplate have to be in your project's
+# CMakeLists in this exact order for cmake to work correctly
+cmake_minimum_required(VERSION 3.16)
+
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(Elegoo-AI-Robot)
+>>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
