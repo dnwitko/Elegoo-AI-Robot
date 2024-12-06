@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Elegoo-AI-Robot
 
 This project ties an existing TensorFlow Lite Micro AI Model to Elegoo's Smart Robot v4.0 using the ESP32-S3-EYE development board. It detects a face with the camera and makes the robot move accordingly.
