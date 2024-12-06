@@ -168,7 +168,3 @@ TensorFlow and Espressif's sample code is covered by the Apache 2.0 license.
 bertmelis' USBHostSerial code is covered by the MIT license.
 
 Modifications made to both codebases for this project are also covered by the included MIT license.
-
-=======
-Testing
->>>>>>> 83705188de6e48fbca2c34160867622cf2a0a7f5
