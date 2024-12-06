@@ -1,6 +1,7 @@
 # Elegoo-AI-Robot
 
 ![Main Build](https://github.com/henrytran720/Elegoo-AI-Robot/actions/workflows/main.yml/badge.svg)
+
 This project ties an existing TensorFlow Lite Micro AI Model to Elegoo's Smart Robot v4.0 using the ESP32-S3-EYE development board. It detects a face with the camera and makes the robot move accordingly.
 
 This project is based off existing code, primarily [bertmelis/USBHostSerial](https://github.com/bertmelis/USBHostSerial) and [espressif/esp-tflite-micro/examples/person_detection at master](https://github.com/espressif/esp-tflite-micro/tree/master/examples/person_detection). Both codebases have been modified to work with each other to grab data from the AI Model and pass the output over serial. These changes have been highlighted in the source code as comments with the word `MODIFICATION`.
