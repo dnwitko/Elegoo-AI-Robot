@@ -8,7 +8,7 @@ This project is a fork of Henry Tran's [Elegoo-AI-Robot](https://github.com/henr
 - **Getting Started** (partially adapted from the original)
 
 ### My Contributions & Modifications
-- **Facial/Auditory Recognition** – Added Google's Teachable Machine support. (WIP)
+- **Vision/Voice Recognition** – Added Google's Teachable Machine support. (WIP)
 - **LiteRT Optimization** – Integrated Lite Runtime for improved AI inference speed. (WIP)
 - **Expanded AI Capabilities** – Enabled both visual and auditory model training/testing. (WIP)
 - **Research Symposium Focus** – My analysis on inference latency and responsiveness, created as part of my 2025 University Research Symposium. (WIP)
@@ -39,5 +39,8 @@ All dependencies have been already added to [idf_component.yml](https://github.c
  
 # Getting Started
 
-Getting started involves following instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot). After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to the Facial/Auditory Recognition section.
+Getting started involves following instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot). After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to the Visual/Voice Recognition section.
 
+## Facial/Auditory Recognition
+
+This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/).
