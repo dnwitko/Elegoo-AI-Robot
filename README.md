@@ -48,7 +48,7 @@ Getting started involves following some instructions detailed in [Henry Tran's r
 
 The setup process is very similar to Henry's. 
 
-## Facial/Auditory Recognition (WIP)
+## Vision/Voice Recognition (WIP)
 
 This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/).
 
