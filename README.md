@@ -5,7 +5,7 @@ This project is a fork of Henry Tran's [Elegoo-AI-Robot](https://github.com/henr
 ### Original Sections (from Henry Tran's Repository)
 - **Hardware Requirements** (with minor modification)
 - **Software Dependencies** (inherited from the original)
-- **Getting Started** (adapted from the original)
+- **Setup** (adapted from the original)
 
 ### My Contributions & Modifications
 - **Vision/Voice Recognition** – Added Google's Teachable Machine support. (WIP)
@@ -42,21 +42,25 @@ All dependencies have been already added to [idf_component.yml](https://github.c
 
 # Getting Started
 
-Getting started involves following instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot). After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to the next sections.
+Getting started involves following some instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot). After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to setup.
 
-## Facial/Auditory Recognition
+## Setup (WIP)
+
+The setup process is very similar to Henry's. 
+
+## Facial/Auditory Recognition (WIP)
 
 This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/).
 
-## LiteRT Optimization
+## LiteRT Optimization (WIP)
 
-Now that the pre-trained models have been deployed onto the ESP32-S3-EYE modeule, we are ready to optimize them utilizing LiteRT for improved AI inference speed. The goal is to ensure the models work effectively under the constraints of the ESP32-S3-EYE, providing low-latency efficient responses to visual and auditory inputs (e.g., face detection, voice commands). 
+Now that the pre-trained models have been deployed onto the ESP32-S3-EYE module, we are ready to optimize them utilizing LiteRT for improved AI inference speed. The goal is to ensure the models work effectively under the constraints of the ESP32-S3-EYE, providing low-latency efficient responses to visual and auditory inputs (e.g., face detection, voice commands). 
 
-## Fine-tuning & Testing AI Capabilities
+## Fine-tuning & Testing AI Capabilities (WIP)
 
 The ESP32-S3-EYE module is now ready to be fine-tuned and tested. The goal is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you may start by re-training the model with new or more diverse data.
 
-## Research Symposium Focus
+## Research Symposium Focus (WIP)
 
 For the research portion of this project, I will analyze our results from the Fine-tuning & Testing AI Capabilities section. Hypothetically, LiteRT will reduce inference latency and improve responsiveness. This may be verified by deploying models without LiteRT optimization and comparing the results.
 
