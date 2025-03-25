@@ -1,4 +1,4 @@
-# Elegoo-Smart-Car
+# Elegoo-AI-Robot
 
 This project is a fork of Henry Tran's [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot) repository. It deploys low-latency computer vision and voice recognition models on an ESP32-S3-EYE module to control an Elegoo AI-powered robot car. Using Google’s Teachable Machine, the system trains and tests models for recognizing visual and auditory inputs. The ESP32-S3-EYE microcontroller supports machine learning inference while operating under strict memory and processing constraints. This project utilizes Lite Runtime (LiteRT), a framework which allows machine learning to be deployed on edge devices with small memory and processing power to optimize performance. It is hypothesized that LiteRT will reduce inference latency and improve responsiveness, demonstrating the feasibility of deploying AI on resource-constrained devices for robotics and smart home applications. This is my University Research Symposium Project for 2025.
 
