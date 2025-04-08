@@ -1,103 +1,82 @@
-# Elegoo-AI-Robot
+# Elegoo-AI-Robot: Vision and Voice Control with LiteRT
 
-![Main Build](https://github.com/henrytran720/Elegoo-AI-Robot/actions/workflows/main.yml/badge.svg)
+This project supplements the original [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot) repository by **@henrytran720**. It integrates both computer vision (person/face detection) and voice command recognition using quantized TensorFlow Lite Micro models, deployed on an ESP32-S3-EYE module, to control an Elegoo robot car via serial commands.
 
-This project ties an existing TensorFlow Lite Micro AI Model to Elegoo's Smart Robot v4.0 using the ESP32-S3-EYE development board. It detects a face with the camera and makes the robot move accordingly.
+This repository represents work undertaken for the 2025 University Research Symposium, focusing on analyzing the performance impact of hardware acceleration (ESP-NN) on embedded machine learning models.
 
-This project is based off existing code, primarily [bertmelis/USBHostSerial](https://github.com/bertmelis/USBHostSerial) and [espressif/esp-tflite-micro/examples/person_detection at master](https://github.com/espressif/esp-tflite-micro/tree/master/examples/person_detection). Both codebases have been modified to work with each other to grab data from the AI Model and pass the output over serial. These changes have been highlighted in the source code as comments with the word `MODIFICATION`.
+Sections marked (WIP - Work In Progress) are subject to change.
+
+## How it Works
+
+1.  **Vision:** The ESP32-S3-EYE uses its camera and a TensorFlow Lite Micro model (originally person detection, potentially adaptable to face detection) to detect a person/face.
+2.  **Voice Commands:** Upon visual confirmation (or potentially always listening, depending on the config), the ESP32-S3-EYE uses its microphone and a second TensorFlow Lite Micro audio classification model to recognize spoken commands (e.g., "Drive Forward", Stop", "Turn Left", "Turn Right").
+3.  **Control:** Recognized voice commands are translated into specific JSON-formatted serial commands.
+4.  **Actuation:** These serial commands are sent via a Micro USB-to-UART adapter to the Elegoo robot car's microcontroller, causing the robot to move accordingly.
+5.  **Research:** The system allows for enabling/disabling ESP-NN hardware acceleration to measure and compare inference latency and responsiveness for the quantized models running on the ESP32 edge device.
+
+## Hardware Requirements
+
+- [Elegoo Smart Car Robot](https://us.elegoo.com/products/elegoo-smart-robot-car-kit-v-4-0) - The robot platform.
+- [ESP32-S3-EYE Dev Board](https://www.aliexpress.us/item/3256803794751194.html) - The microcontroller performing sensing and ML inference.
+- [CP2102 Micro USB to UART Converter](https://www.amazon.com/HiLetgo-CP2102-Module-Converter-Replace/dp/B01N47LXRA) - Bridges USB Host on ESP32 to Robot's UART.
+- [JST XH to Dupont Connector Kit](https://www.amazon.com/Kidisoii-Dupont2-54-Connector-Pre-Crimped-Compatible/dp/B0CMCN9CXD/135-4941321-1839956) - For fabricating the ESP32 microUSB -> Robot UART cable.
+- [Micro USB to Micro USB Male-to-Male OTG Cable](https://www.amazon.com/Micro-USB-Male-Data-Cable/dp/B0872GMD7V/) - Connects the ESP32-S3-EYE to the CP2102 adapter.
+- [USB to Micro USB Data Transfer Cable](https://www.amazon.com/FEMORO-Transfer-Charging-Smartphone-Bluetooth/dp/B0D2KZQR8T) - For flashing the ESP32-S3-EYE from your computer.
 
 ## Software Dependencies
 
-All dependencies have been already added to [idf_component.yml](https://github.com/henrytran720/Elegoo-AI-Robot/blob/main/main/idf_component.yml) and should be automatically downloaded upon compile, but for reference, here are all the dependencies this project requires:
+All dependencies have been already added to [idf_component.yml](https://github.com/dnwitko/Elegoo-AI-Robot/blob/main/main/idf_component.yml) thanks to Henry, and should be automatically downloaded upon compilation. For reference, here are all the dependencies this project requires:
 
+- [ESP-IDF: Version v5.4](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html#manual-installation) (or your specific version) is required.
+- [espressif/esp-tflite-micro](https://components.espressif.com/components/espressif/esp-tflite-micro): TensorFlow Lite Micro library optimized for Espressif chips (includes ESP-NN integration).
 - [Espressif TinyUSB fork](https://components.espressif.com/components/espressif/tinyusb)
 - [Espressif's additions to TinyUSB](https://components.espressif.com/components/espressif/esp_tinyusb)
 - [USB Host CDC-ACM Class Drive](https://components.espressif.com/components/espressif/usb_host_cdc_acm/versions/2.0.3)
 - [Virtual COM Port Service](https://components.espressif.com/components/espressif/usb_host_vcp)
-- [ESP32 Camera Driver](https://components.espressif.com/components/espressif/esp32-camera/)
-- [TensorFlow Lite Micro for Espressif Chipsets](https://components.espressif.com/components/espressif/esp-tflite-micro/)
+- [espressif/esp32-camera](https://components.espressif.com/components/espressif/esp32-camera): Driver for the camera module.
+- [espressif/esp-tflite-micro](https://components.espressif.com/components/espressif/esp-tflite-micro): TensorFlow Lite Micro library optimized for Espressif chips (includes ESP-NN integration).
 - [bertmelis' USBHostSerial](https://github.com/bertmelis/USBHostSerial)
-- Serial device drivers (Technically you only need one but to save time all three have been included):
+- Serial device drivers (Technically, you only need one, but to save time, all three have been included):
   - [CH34x USB-UART converter driver](https://components.espressif.com/components/espressif/usb_host_ch34x_vcp/versions/2.0.0)
   - [Silicon Labs CP210x USB-UART converter driver](https://components.espressif.com/components/espressif/usb_host_cp210x_vcp/versions/2.0.0)
   - [FTDI UART-USB converters driver](https://components.espressif.com/components/espressif/usb_host_ftdi_vcp/versions/2.0.0)
 
-## Hardware Requirements
+---
 
-Here's what you'll need to buy to use this project:
+# Getting Started
 
-* [Elegoo's Smart Robot Car Kit v4.0](https://us.elegoo.com/products/elegoo-smart-robot-car-kit-v-4-0)
-* [Espressif ESP32-S3-EYE Development Board](https://www.aliexpress.us/item/3256803794751194.html)
-* [CP2102 Micro USB to UART Converter](https://www.amazon.com/HiLetgo-CP2102-Module-Converter-Replace/dp/B01N47LXRA) (It doesn't need to be this exact converter, and any serial device will work so long as it is compatible with the drivers above)
-* [JST XH to Dupont Connector Kit](https://www.amazon.com/Kidisoii-Dupont2-54-Connector-Pre-Crimped-Compatible/dp/B0CMCN9CXD/135-4941321-1839956) - This is so you can fabricate a cable that will connect the UART port on the Robot to the pins on the serial converter.
-* [Micro USB to Micro USB OTG Cable](https://www.amazon.com/Micro-USB-Male-Data-Cable/dp/B0872GMD7V/) - To connect the ESP32-S3-EYE to the serial converter.
-* USB-A/USB-C to Micro USB Cable - You'll need this to flash the ESP32-S3-EYE and communicate with the serial adapter for testing. A USB-A to Micro USB cable should have come with your robot for our purposes.
+Getting started involves following some instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot) to assemble and prepare the Elegoo Robot car. After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to train your models proceed to setup.
 
-## Getting Started
+## Vision/Voice Recognition (WIP)
 
-### The basics
+This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (`.tflite`) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/). Once you have your models exported, you are ready to move on to **Setup and Flashing**.
 
-You will need to have the [ESP-IDF SDK](https://github.com/espressif/esp-idf) installed to get started. Installation instructions can be found [here.](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html#manual-installation) For this project I used version 5.3 of the SDK, however this code should work for future versions.
+## Setup and Flashing (WIP)
 
-The ESP32-S3-EYE should have come with [default firmware](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md#17-default-firmware-and-function-test) installed. Take some time to play around with it and test its basic functions, such as the camera, LCD, and microphone. Once our code is flashed to the ESP32-S3, only the camera and certain LEDs will function.
-
-You may proceed to assembling the project once you've confirmed the ESP32-S3-EYE is fully functional.
-
-### Assembly
-
-You should already have the Elegoo Robot assembled. If not, please refer to the instruction booklets that came with your robot, or refer to the online instructions available at the end of this readme.
-
-You should also have the serial adapter, the JST XH to Dupont kit, and the Micro USB to Micro USB cable. If you still need to get those, please refer back to [Hardware Requirements](<#Hardware Requirements>).
-
-Depending on the serial adapter you ordered, you may need to solder the pins that came with it to the serial adapter so the Dupont end of the cable can have a solid connection. Here is what it should look like:
-
-![](assets/soldered_serial.jpg)
-
-Now we fabricate our serial cable. Using the JST XH to Dupont kit, we can assemble a 4-pin cable that goes from JST XH to Dupont, which should look like this:
-
-![](assets/serial_and_dupont.jpg)
-
-![](assets/jst-xh.jpg)
-
-Unplug the existing camera from the UART port on the robot, and connect our new cable to the port. **Pay attention to the color of the cables!**
-
-![](assets/jst-robot.jpg)
-
-![](assets/jst-robot2.jpg)
-
-With the serial adapter connected, switch on the power to the robot. A red LED should be visible on the serial adapter, confirming that it is receiving power. You should now be able to communicate with the robot with a USB-A to Micro USB cable from your computer. Once connected, you should be able to issue commands such as:
-
-```json
-{"H":"Elegoo","N":1,"D1":0,"D2":50,"D3":1}
-{"H":"Elegoo","N":1,"D1":0,"D2":0,"D3":1}
-```
-The syntax for these commands will be explained at the end of this readme.
-
-If the robot does not respond to any of your commands, please make sure the switch on the robot's Arduino board located next to the USB-B port is set to `cam`, and try running the command again.
-
-![](assets/robot-switch.jpg)
-
-### Setup
-
-Once you know the camera module works, go ahead and clone this repository to a folder of your choosing:
+The setup process is very similar to Henry's. Start by cloning my repository:
 
 ```bash
-git clone https://github.com/henrytran720/Elegoo-AI-Robot.git
+git clone https://github.com/dnwitko/Elegoo-AI-Robot.git
 cd Elegoo-AI-Robot
 ```
 
-From there, make sure you have the ESP-IDF environment running on your favorite terminal, whether it's CMD, PowerShell, bash, etc. You'll know it's working when you can run `idf.py` and you see something like this:
+Due to the memory constraints of the ESP32, it is crucial to quantize your TF Lite models. We need to quantize them both to `int8` from `float32`. Use the `quantize_audio.py` script for this step. Then, convert the model to a C Array with the instructions below.
 
+Use the `xxd` tool (or a similar utility) to convert each quantized `.tflite` model into a C byte array (`.cc`) and create a corresponding header (`.h`) declaring the array and its length variable.
+
+```bash
+# For audio model:
+xxd -i quantized_audio_model.tflite > main/models/audio_model/audio_model_data.cc
+# Add 'const int g_audio_model_data_len = <size>;' to the .cc file
+# Create main/models/audio_model/audio_model_data.h declaring the array/len
+
+# For vision model (replace 'person'  with 'face' if using person detection):
+xxd -i quantized_vision_model.tflite > main/models/person_model/person_detect_model_data.cc
+# Add 'const int g_person_detect_model_data_len = <size>;' to the .cc file
+# Create main/models/person_model/person_detect_model_data.h declaring the array/len
 ```
-Usage: idf.py [OPTIONS] COMMAND1 [ARGS]... [COMMAND2 [ARGS]...]...
 
-  ESP-IDF CLI build management tool. For commands that are not known to idf.py an attempt to execute it as a build
-  system target will be made. Selected target: esp32s3
-
-...
-```
-
-Speaking of selecting targets, we'll need to do that for this project. Run the following command:
+From there, add your quantized models to their respective `models\` folder. Then, open your ESP-IDF environment and set your target:
 
 ```bash
 # This will set up the project to be compiled for the ESP32-S3.
@@ -105,51 +84,38 @@ Speaking of selecting targets, we'll need to do that for this project. Run the f
 idf.py set-target esp32s3
 ```
 
-You should now be ready to compile the project.
-
-### Compiling
-
-It's now time to flash our code. Make sure you have the ESP32-S3-EYE plugged in for this and run the following command:
+You are now ready to flash the project to the ESP32. Connect the ESP32-S3-EYE to your computer using the **data transfer** Micro USB cable. Run the flash command (this will build, then flash):
 
 ```bash
-# Will flash the project to the ESP32-S3-EYE.
-# If the project hasn't been built or changes have been made, it will automatically be built before flashing.
 idf.py flash
+# (Optional) You may choose a port to flash to by running: idf.py flash -p [YOUR-ESP32-PORT]
+# (e.g., idf.py flash -p COM4 on Windows, or /dev/ttyS4 on Linux/WSL)
 ```
 
-The build will take quite some time depending on your CPU. Once finished, you can unplug the ESP32-S3-EYE and plug it in to the serial adapter using the Micro USB to Micro USB cable.
+Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the Micro USB to Micro USB OTG cable.
 
-## Final Product
+## Fine-tuning & Testing AI Capabilities (WIP)
 
-Switch the power on to the robot and wait a few seconds. You should see at least one of the LEDs on both the serial adapter and the Arduino board flashing, indicating that the serial connection has been established and data is being transmitted.
+The fine-tuning process is quite limited. The goal of fine-tuning is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you can simply re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!). Do this if you would like to add new classes, or if you feel like your models aren't making accurate inferences.
 
-Make sure you are in a lit environment, and bring the ESP32-S3-EYE to your face. The robot should begin moving. It will continue to do so as long as it can see your face.
+## Research Symposium Focus (WIP)
 
-Here is what the finished assembly should look like:
+For the research portion of this project, I will analyze the performance of the quantized TF Lite models running on the ESP32-S3-EYE under two conditions:
 
-![](assets/final-product.jpg)
+1.  **Without ESP-NN:** Hardware acceleration disabled via `menuconfig`.
+2.  **With ESP-NN:** Hardware acceleration enabled via `menuconfig`.
 
-## Additional Resources
+The key metrics for comparison will be:
 
-* [Smart Robot Car v4.0 Manual & Source Code](https://download.elegoo.com/?t=RobotCarV4.0)
-* [Espressif ESP-IDF Programming Guide for the ESP32-S3-EYE](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/index.html)
-* [ESP32-S3-EYE Getting Started Guide](https://github.com/espressif/esp-who/blob/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
+*   **Inference Latency:** The time taken (in milliseconds or microseconds) for each model (vision and audio) to perform a single inference, measured using `esp_timer`.
+*   **System Responsiveness:** Measure of the delay between a command being spoken and the robot reacting.
+*   **(Optional) CPU Utilization / Power Consumption:** If time and tools permit.
 
-### Command Syntax
+This analysis will demonstrate the real-world impact of Espressif's Neural Network acceleration on the feasibility and performance of running multiple ML models concurrently on an edge device.
 
-Thanks to Elegoo providing an easy way to control their robot over serial, there are a lot of things that we can now do with the robot, including the commands demonstrated in [Assembly](#Assembly). Below is a basic explanation of the commands used in this project and how the syntax works.
+(Data Collection WIP)
 
-```json
-{
-  "H": "Elegoo",    // This is the ID that gets passed to the robot. This value can be whatever you choose and is required on almost all commands.
-  "N": 1,           // "N" selects the command that gets executed on the robot.
-  "D1": 0,          // Paramater 1. This selects the motors that you wish to control. 1 = All motors, 2 = Left motors, 3 = Right motors.
-  "D2": 50,         // Parameter 2. This sets the speed of the motor, and has an acceptable value of 0-255.
-  "D3": 1           // Parameter 3. This sets the rotation direction of the wheels. 1 = Clockwise, 2 = Counterclockwise.
-}
-```
-
-Additional commands and instructions can be found in the robot's online manual.
+---
 
 ## License
 
@@ -158,3 +124,11 @@ TensorFlow and Espressif's sample code is covered by the Apache 2.0 license.
 bertmelis' USBHostSerial code is covered by the MIT license.
 
 Modifications made to both codebases for this project are also covered by the included MIT license.
+
+## Credits
+
+This project is based on Henry Tran's [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot). Special thanks to **Henry Tran** for his work on the original code.
+
+Thanks to **bertmelis** for the [USBHostSerial code](https://github.com/bertmelis/USBHostSerial).
+
+Thanks to **Espressif** for the [ESP32 SDK](https://github.com/espressif/esp-idf).
