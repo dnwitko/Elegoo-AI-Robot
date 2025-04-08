@@ -50,7 +50,7 @@ Getting started involves following some instructions detailed in [Henry Tran's r
 
 ## Vision/Voice Recognition (WIP)
 
-This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/). Once you have your models exported, you are ready to move on to **Setup and Flashing**.
+This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (`.tflite`) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/). Once you have your models exported, you are ready to move on to **Setup and Flashing**.
 
 ## Setup and Flashing (WIP)
 
