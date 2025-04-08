@@ -12,7 +12,7 @@ Sections marked (WIP - Work In Progress) are subject to change.
 2.  **Voice Commands:** Upon visual confirmation (or potentially always listening, depending on the config), the ESP32-S3-EYE uses its microphone and a second TensorFlow Lite Micro audio classification model to recognize spoken commands (e.g., "Drive Forward",   
     "Stop", "Turn Left", "Turn Right").
 3.  **Control:** Recognized voice commands are translated into specific JSON-formatted serial commands.
-4.  **Actuation:** These serial commands are sent via a microUSB-to-UART adapter to the Elegoo robot car's microcontroller, causing the robot to move accordingly.
+4.  **Actuation:** These serial commands are sent via a Micro USB-to-UART adapter to the Elegoo robot car's microcontroller, causing the robot to move accordingly.
 5.  **Research:** The system allows for enabling/disabling ESP-NN hardware acceleration to measure and compare inference latency and responsiveness for the quantized models running on the ESP32 edge device.
 
 ## Hardware Requirements
@@ -93,11 +93,11 @@ idf.py flash
 # (e.g., idf.py flash -p COM4 on Windows, or /dev/ttyS4 on Linux/WSL)
 ```
 
-Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the microUSB to microUSB OTG cable.
+Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the Micro USB to Micro USB OTG cable.
 
 ## Fine-tuning & Testing AI Capabilities (WIP)
 
-The ESP32-S3-EYE module fine-tuning is quite limited. The goal of fine-tuning is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you can simply re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!).
+The fine-tuning process is quite limited. The goal of fine-tuning is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you can simply re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!). Do this if you would like to add new classes, or if you feel like your models aren't making accurate inferences.
 
 ## Research Symposium Focus (WIP)
 
@@ -128,6 +128,8 @@ Modifications made to both codebases for this project are also covered by the in
 
 ## Credits
 
-- This project is based on Henry Tran's [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot). Special thanks to **Henry Tran** for his work on the original code.
-- Thanks to **bertmelis** for the [USBHostSerial code](https://github.com/bertmelis/USBHostSerial).
-- Thanks to **Espressif** for the [ESP32 SDK](https://github.com/espressif/esp-idf).
+This project is based on Henry Tran's [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot). Special thanks to **Henry Tran** for his work on the original code.
+
+Thanks to **bertmelis** for the [USBHostSerial code](https://github.com/bertmelis/USBHostSerial).
+
+Thanks to **Espressif** for the [ESP32 SDK](https://github.com/espressif/esp-idf).
