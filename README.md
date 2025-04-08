@@ -67,7 +67,6 @@ cd Elegoo-AI-Robot
 
 Use the `xxd` tool (or a similar utility) to convert each quantized `.tflite` model into a C byte array (`.cc` file) and create a corresponding header (`.h`) declaring the array and its length variable.
         
-        ```bash
         # Example for audio model:
         xxd -i quantized_audio_model.tflite > main/models/audio_model/audio_model_data.cc
         # Manually add 'const int g_audio_model_data_len = <size>;' to the .cc file
@@ -77,9 +76,8 @@ Use the `xxd` tool (or a similar utility) to convert each quantized `.tflite` mo
         xxd -i quantized_vision_model.tflite > main/models/face_model/face_detect_model_data.cc
         # Manually add 'const int g_face_detect_model_data_len = <size>;' to the .cc file
         # Create main/models/face_model/face_detect_model_data.h declaring the array/len
-        ```
 
-From there, add your quantized models to their respective ```bash models\``` folder. Then, open your ESP-IDF environment and set your target:
+From there, add your quantized models to their respective `bash models\` folder. Then, open your ESP-IDF environment and set your target:
 
 ```bash
 # This will set up the project to be compiled for the ESP32-S3.
