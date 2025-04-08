@@ -17,8 +17,6 @@ Sections marked (WIP - Work In Progress) are subject to change.
 
 ## Hardware Requirements
 
-(Inherited and modified from the original repository)
-
 - [Elegoo Smart Car Robot](https://us.elegoo.com/products/elegoo-smart-robot-car-kit-v-4-0) - The robot platform.
 - [ESP32-S3-EYE Dev Board](https://www.aliexpress.us/item/3256803794751194.html) - The microcontroller performing sensing and ML inference.
 - [CP2102 Micro USB to UART Converter](https://www.amazon.com/HiLetgo-CP2102-Module-Converter-Replace/dp/B01N47LXRA) - Bridges USB Host on ESP32 to Robot's UART.
