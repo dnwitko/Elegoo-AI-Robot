@@ -1,4 +1,4 @@
-# Elegoo-AI-Robot: Vision and Voice Control Integration
+# Elegoo-AI-Robot: Vision and Voice Control
 
 This project supplements the original [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot) repository by **@henrytran720**. It integrates both computer vision (person/face detection) and voice command recognition using quantized TensorFlow Lite Micro models, deployed on an ESP32-S3-EYE module, to control an Elegoo robot car via serial commands.
 
