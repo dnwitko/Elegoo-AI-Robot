@@ -52,7 +52,7 @@ Getting started involves following some instructions detailed in [Henry Tran's r
 
 ## Vision/Voice Recognition (WIP)
 
-This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/).
+This project utilizes Google's Teachable Machine to train vision and voice recognition models, exported as TensorFlow Lite (.tflite) files. To train your own models, visit Google's [Teachable Machine website](https://teachablemachine.withgoogle.com/). Once you have your models exported, you are ready to move on to **Setup and Flashing**.
 
 ## Setup and Flashing (WIP)
 
@@ -63,19 +63,21 @@ git clone https://github.com/dnwitko/Elegoo-AI-Robot.git
 cd Elegoo-AI-Robot
 ```
 
-**Quantization**: Due to the memory constraints of the ESP32, this step is crucial. We need to quantize both models to `int8` from `float32`. Start by using the `quantize_audio.py` script for this step. Then, convert the model to a C Array.
+Due to the memory constraints of the ESP32, it is crucial to quantize your TF Lite models. We need to quantize them both to `int8` from `float32`. Use the `quantize_audio.py` script for this step. Then, convert the model to a C Array with the instructions below.
 
-Use the `xxd` tool (or a similar utility) to convert each quantized `.tflite` model into a C byte array (`.cc` file) and create a corresponding header (`.h`) declaring the array and its length variable.
+Use the `xxd` tool (or a similar utility) to convert each quantized `.tflite` model into a C byte array (`.cc`) and create a corresponding header (`.h`) declaring the array and its length variable.
         
-        # For audio model:
-        xxd -i quantized_audio_model.tflite > main/models/audio_model/audio_model_data.cc
-        # Manually add 'const int g_audio_model_data_len = <size>;' to the .cc file
-        # Create main/models/audio_model/audio_model_data.h declaring the array/len
+```bash
+# For audio model:
+xxd -i quantized_audio_model.tflite > main/models/audio_model/audio_model_data.cc
+# Add 'const int g_audio_model_data_len = <size>;' to the .cc file
+# Create main/models/audio_model/audio_model_data.h declaring the array/len
 
-        # For vision model (replace 'person'  with 'face' if using person detection):
-        xxd -i quantized_vision_model.tflite > main/models/person_model/person_detect_model_data.cc
-        # Manually add 'const int g_person_detect_model_data_len = <size>;' to the .cc file
-        # Create main/models/person_model/person_detect_model_data.h declaring the array/len
+# For vision model (replace 'person'  with 'face' if using person detection):
+xxd -i quantized_vision_model.tflite > main/models/person_model/person_detect_model_data.cc
+# Add 'const int g_person_detect_model_data_len = <size>;' to the .cc file
+# Create main/models/person_model/person_detect_model_data.h declaring the array/len
+```
 
 From there, add your quantized models to their respective `models\` folder. Then, open your ESP-IDF environment and set your target:
 
@@ -97,7 +99,7 @@ Once the flashing process completes, you can unplug the ESP32 and plug it in to 
 
 ## Fine-tuning & Testing AI Capabilities (WIP)
 
-The ESP32-S3-EYE module is now ready to be fine-tuned and tested. The goal is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you may start by re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!).
+The ESP32-S3-EYE module fine-tuning is quite limited. The goal of fine-tuning is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you can simply re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!).
 
 ## Research Symposium Focus (WIP)
 
