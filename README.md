@@ -46,7 +46,7 @@ All dependencies have been already added to [idf_component.yml](https://github.c
 
 # Getting Started
 
-Getting started involves following some instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot) to assemble and prepare the Elegoo Robot car. After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to setup.
+Getting started involves following some instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot) to assemble and prepare the Elegoo Robot car. After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to train your models proceed to setup.
 
 ## Vision/Voice Recognition (WIP)
 
