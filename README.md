@@ -1,19 +1,19 @@
 # Elegoo-AI-Robot: Vision and Voice Control Integration
 
-This project enhances the original [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot) repository by **@henrytran720**. It integrates both computer vision (person/face detection) and voice command recognition using quantized TensorFlow Lite Micro models, deployed on an ESP32-S3-EYE module, to control an Elegoo robot car via serial commands.
+This project supplements the original [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot) repository by **@henrytran720**. It integrates both computer vision (person/face detection) and voice command recognition using quantized TensorFlow Lite Micro models, deployed on an ESP32-S3-EYE module, to control an Elegoo robot car via serial commands.
 
-This repository represents work undertaken for the **2025 University Research Symposium**, focusing on analyzing the performance impact of hardware acceleration (ESP-NN) on embedded machine learning models.
+This repository represents work undertaken for the 2025 University Research Symposium, focusing on analyzing the performance impact of hardware acceleration (ESP-NN) on embedded machine learning models.
 
-**Note:** Sections marked (WIP - Work In Progress) may require further implementation or refinement.
+Sections marked (WIP - Work In Progress) are subject to change.
 
 ## How it Works
 
-1.  **Vision:** The ESP32-S3-EYE uses its camera and a TensorFlow Lite Micro model (originally person detection, potentially adaptable to face detection) to detect the presence of a person/face.
-2.  **Voice Commands:** Upon visual confirmation (or potentially always listening, depending on configuration), the ESP32-S3-EYE uses its microphone and a second TensorFlow Lite Micro audio classification model to recognize spoken commands (e.g., "Drive Forward",   
+1.  **Vision:** The ESP32-S3-EYE uses its camera and a TensorFlow Lite Micro model (originally person detection, potentially adaptable to face detection) to detect a person/face.
+2.  **Voice Commands:** Upon visual confirmation (or potentially always listening, depending on the config), the ESP32-S3-EYE uses its microphone and a second TensorFlow Lite Micro audio classification model to recognize spoken commands (e.g., "Drive Forward",   
     "Stop", "Turn Left", "Turn Right").
 3.  **Control:** Recognized voice commands are translated into specific JSON-formatted serial commands.
-4.  **Actuation:** These serial commands are sent via a USB-to-UART adapter to the Elegoo robot car's microcontroller, causing the robot to move accordingly.
-5.  **Research:** The system allows for enabling/disabling ESP-NN hardware acceleration to measure and compare inference latency and responsiveness for the quantized models running on the ESP32-S3 edge device.
+4.  **Actuation:** These serial commands are sent via a microUSB-to-UART adapter to the Elegoo robot car's microcontroller, causing the robot to move accordingly.
+5.  **Research:** The system allows for enabling/disabling ESP-NN hardware acceleration to measure and compare inference latency and responsiveness for the quantized models running on the ESP32 edge device.
 
 ## Hardware Requirements
 
@@ -99,11 +99,11 @@ Once the flashing process completes, you can unplug the ESP32 and plug it in to 
 
 ## Fine-tuning & Testing AI Capabilities (WIP)
 
-The ESP32-S3-EYE module is now ready to be fine-tuned and tested. The goal is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you may start by re-training the model with new or more diverse data.
+The ESP32-S3-EYE module is now ready to be fine-tuned and tested. The goal is to verify the system's responsiveness and accuracy in various environments, in order to improve the car's interactivity and functionality. Since Teachable Machine doesn't support direct fine-tuning, you may start by re-training the model with new or more diverse data, and replacing your models in the same directory with your fine-tuned model (remember to quantize!).
 
 ## Research Symposium Focus (WIP)
 
-For the research portion of this project, I will analyze the performance of the quantized TensorFlow Lite models running on the ESP32-S3-EYE under two conditions:
+For the research portion of this project, I will analyze the performance of the quantized TF Lite models running on the ESP32-S3-EYE under two conditions:
 
 1.  **Without ESP-NN:** Hardware acceleration disabled via `menuconfig`.
 2.  **With ESP-NN:** Hardware acceleration enabled via `menuconfig`.
@@ -114,7 +114,7 @@ The key metrics for comparison will be:
 *   **System Responsiveness:** Measure of the delay between a command being spoken and the robot reacting.
 *   **(Optional) CPU Utilization / Power Consumption:** If time and tools permit.
 
-This analysis will demonstrate the real-world impact of quantization and Espressif's Neural Network acceleration on the feasibility and performance of running multiple ML models concurrently on an edge device.
+This analysis will demonstrate the real-world impact of Espressif's Neural Network acceleration on the feasibility and performance of running multiple ML models concurrently on an edge device.
 
 (Data Collection WIP)
 
