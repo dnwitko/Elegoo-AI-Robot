@@ -46,28 +46,22 @@ Getting started involves following some instructions detailed in [Henry Tran's r
 ## Setup and Flashing
 
 The setup process is very similar to Henry's. Start by opening your ESP-IDF environment, and cloning my repository:
-
 ```bash
 git clone https://github.com/dnwitko/Elegoo-AI-Robot.git
 ```
-
 Then, change into the project directory, and set your target:
-
 ```bash
-cd Elegoo-AI-Robot
-idf.py set-target esp32s3
 # This will set up the project to be compiled for the ESP32-S3.
 # If you're compiling this project for another platform, please set the target appropriately for your environment (idf.py list-targets).
+cd Elegoo-AI-Robot
+idf.py set-target esp32s3
 ```
-
 Once the project finishes building, you are now ready to flash the project to the ESP32. Connect the ESP32-S3-EYE to your computer using the **data transfer** Micro USB cable. Run the flash command (this will build, then flash):
-
 ```bash
-idf.py flash
 # (Optional) You may choose a port to flash to by running: idf.py flash -p [YOUR-ESP32-PORT]
 # (e.g., idf.py flash -p COM4 on Windows, or /dev/ttyS4 on Linux/WSL)
+idf.py flash
 ```
-
 Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the Micro USB to Micro USB OTG cable. This is the completed flashing and setup process. You may now turn on the car and see if it works. Say "yes", and the car will drive forwards. Say "no" and the car will stop. These voice commands and responses to commands may be expanded on or changed, but it will require core project file modifications to function.
 
 ---
@@ -97,7 +91,6 @@ error: class template argument deduction failed:
 note:   candidate expects 1 argument, 0 provided
 ```
 This issue can be fixed by finding the line in `main/main_functions.cc` that reads: `static tflite::MicroMutableOpResolver micro_op_resolver;`
-
 And changing it to: `static tflite::MicroMutableOpResolver<4> micro_op_resolver;` (or however many operators your model uses).
 
 ## 3. Interpreter Allocation Failure
