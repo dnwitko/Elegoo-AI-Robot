@@ -1,7 +1,0 @@
-0 Background Noise
-1 DriveBackward
-2 DriveForward
-3 DriveToMe
-4 Stop
-5 TurnLeft
-6 TurnRight
