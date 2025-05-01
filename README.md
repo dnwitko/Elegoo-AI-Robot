@@ -31,7 +31,6 @@ All dependencies have been already added to [idf_component.yml](https://github.c
 - [Espressif's additions to TinyUSB](https://components.espressif.com/components/espressif/esp_tinyusb)
 - [USB Host CDC-ACM Class Driver](https://components.espressif.com/components/espressif/usb_host_cdc_acm/versions/2.0.3)
 - [Virtual COM Port Service](https://components.espressif.com/components/espressif/usb_host_vcp)
-- [espressif/esp-tflite-micro](https://components.espressif.com/components/espressif/esp-tflite-micro): TensorFlow Lite Micro library optimized for Espressif chips (includes ESP-NN integration).
 - [bertmelis' USBHostSerial](https://github.com/bertmelis/USBHostSerial)
 - Serial device drivers (Technically, you only need one, but to save time, all three have been included):
   - [CH34x USB-UART converter driver](https://components.espressif.com/components/espressif/usb_host_ch34x_vcp/versions/2.0.0)
