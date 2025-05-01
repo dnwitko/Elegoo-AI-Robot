@@ -55,9 +55,9 @@ Then, change into the project directory, and set your target:
 
 ```bash
 cd Elegoo-AI-Robot
+idf.py set-target esp32s3
 # This will set up the project to be compiled for the ESP32-S3.
 # If you're compiling this project for another platform, please set the target appropriately for your environment (idf.py list-targets).
-idf.py set-target esp32s3
 ```
 
 Once the project finishes building, you are now ready to flash the project to the ESP32. Connect the ESP32-S3-EYE to your computer using the **data transfer** Micro USB cable. Run the flash command (this will build, then flash):
