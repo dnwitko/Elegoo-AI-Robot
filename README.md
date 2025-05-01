@@ -70,18 +70,46 @@ Once the flashing process completes, you can unplug the ESP32 and plug it in to 
 
 This project ran into many issues throughout development. The current state is NOT a working build. Below is a list of known issues, and how to troubleshoot them.
 
-## 1. Debugging Limitations Due to USB Port Usage
+## 1. No Camera Feedback Displayed After Flashing
 
 **Issue:**
-Standard real-time serial debugging (viewing ESP_LOG output via USB CDC) is unavailable during normal operation. The ESP32-S3-EYE's USB port is configured in Host mode to communicate with the CP2102x serial adapter, precluding its use as a Device (CDC) for PC monitoring. Attempting to run `idf.py monitor` while connected to a PC results in a vague `ClearCommError` message:
+After flashing the project to the ESP32-S3-EYE, you may notice the camera feedback no longer displaying on the LCD screen, given you are using an LCD module. This is expected and not harmful to the device. If you would like to restore this functionality, you will have to erase the flash and upload the default firmware to the device. Thankfully, Espressif provides a [software tool](https://docs.espressif.com/projects/esp-test-tools/en/latest/esp32/production_stage/tools/flash_download_tool.html) that makes the process quick and simple. 
+
+* Download it, and unzip the archive. 
+* Run `flash_download_tool_3.9.8_w1.exe` and connect your ESP32 via USB. 
+* To put the ESP32 in download mode: hold down the `BOOT` button and click the `RST` button, then let go of the `BOOT` button. Both are located near the bottom of the device, by the USB port. 
+* Select your ChipType, leave the WorkMode in `Develop`, and select a LoadMode of your choice. 
+* Then, click the `ERASE` button and wait for the prompt to read `FINISH`. 
+* Now, get the [default firmware](https://github.com/espressif/esp-who/tree/master/default_bin/esp32-s3-eye/v2.2) from Espressif's esp-who repository. 
+* Go back to the tool and add your firmware binary location to the SPIDownload list (click on `...`). 
+* Put the memory address as `0x0` and click `START`. When the prompt reads `FINISH` again, you can unplug and replug your ESP32 to see it boot into its default state once again.
+
+This fix applies to issue number two as well.
+
+## 2. No Virtual COM Port After Flashing
+
+**Issue:**
+After flashing the project to the ESP32-S3-EYE, you may notice the microcontroller is no longer recognized by your PC and thus no virtual COM port opens for you to connect to:
+```bash
+PS C:\Espressif\frameworks\esp-idf-v5.3.2\Elegoo-AI-Robot> idf.py monitor
+Executing action: monitor
+No serial ports found. Connect a device, or use '-p PORT' option to set a specific port.
+```
+To fix this, you have two options. Either refer to the solution in issue number one and reupload the default firmware, or put the device into download mode (seen above). These are currently the ONLY known workarounds for this issue. This issue also means you CANNOT monitor the serial output (`idf.py monitor`) after flashing the project to the device. More details are in issue number three.
+
+## 3. Debugging Limitations Due to USB Port Usage
+
+**Issue:**
+Standard real-time serial debugging (e.g., viewing ESP_LOG output via USB CDC) is unavailable after flashing. The ESP32-S3-EYE's USB port is configured in Host mode to communicate with the CP2102x serial adapter, precluding its use as a Device (CDC) for PC monitoring. Attempting to run `idf.py monitor` while connected to a PC results in a vague `ClearCommError` message:
 ```bash
 Error: ClearCommError failed (PermissionError(13, 'The device does not recognize the command.', None, 22))
 ```
-There is NO known fix for this, and there are NO known workarounds. Do NOT attempt to monitor the serial output after the device initializes USBHost mode. ONLY flash the code using `idf.py flash`. While this is quite a limiting error, encountering it will NOT break anything, you will simply be unable to debug the program. The hardware configuration requires the USB port to be used for host functionality. Simultaneous device-mode debugging is IMPOSSIBLE without additional hardware (e.g., UART adapter on separate pins). You may attempt to debug using alternative methods, like visual feedback or inferring the state from behavior, with varied results.
+There is NO known fix for this, and there are NO known workarounds. Do NOT attempt to monitor the serial output once the device initializes USBHost mode. ONLY flash the code using `idf.py flash`. While this is quite a limiting error, encountering it will not break anything, you will simply be unable to debug the program. The hardware configuration requires the USB port to be used for host functionality. Simultaneous device-mode debugging is IMPOSSIBLE without additional hardware (e.g., UART adapter on separate pins). You may attempt to debug using alternative methods, like visual feedback (from the LED GPIO) or inferring the state from the car's behavior, which may net varied results.
 
-## 2. OpResolver Template Argument Missing
+## 4. OpResolver Template Argument Missing
 
-**Issue:** A `class template argument deduction failed` error occurred on the `tflite::MicroMutableOpResolver` declaration. Sometimes, the required template argument specifying the number of operators to be registered can be missing, if not added in manually:
+**Issue:**
+A `class template argument deduction failed` error occurred on the `tflite::MicroMutableOpResolver` declaration. Sometimes, the required template argument specifying the number of operators to be registered can be missing, if not added in manually:
 ```bash
 In function 'void setup()':
 error: class template argument deduction failed:
@@ -93,9 +121,10 @@ note:   candidate expects 1 argument, 0 provided
 This issue can be fixed by finding the line in `main/main_functions.cc` that reads: `static tflite::MicroMutableOpResolver micro_op_resolver;`
 And changing it to: `static tflite::MicroMutableOpResolver<4> micro_op_resolver;` (or however many operators your model uses).
 
-## 3. Interpreter Allocation Failure
+## 5. Interpreter Allocation Failure
 
-**Issue:** The program logs `AllocateTensors() failed` during setup:
+**Issue:** 
+The program logs `AllocateTensors() failed` during setup:
 ```bash
 ... (previous boot messages) ...
 I (150) main_task: App framework initialized.
@@ -107,15 +136,17 @@ E (1190) main_task: Failed to initialize TensorFlow Lite Micro. Halting.
 ```
 This issue can be fixed by checking the value of `kTensorArenaSize` in `main_functions.cc`. The default `micro_speech` model requires roughly 10-15 KB, but custom models or additional operations might need more. Verify is PSRAM is disabled in `idf.py menuconfig`. Check the list of operators added to `TFLMOpResolver` in `main_functions.cc`. If an operation required by the model is missing, allocation can fail. Add the operation to the list and modify the `<>` value in the declaration line. 
 
-## 4. Model Input Tensor Mismatch
+## 6. Model Input Tensor Mismatch
 
-**Issue:** The program logs `Bad input tensor parameters in model` during setup, or inference produces nonsense results. 
+**Issue:**
+The program logs `Bad input tensor parameters in model` during setup, or inference produces nonsense results. 
 
 This issue can be fixed by verifying the expected input tensor shape, size, and type (`kTfLiteInt8`) in `main_functions.cc::setup()` against the model's requirements. Check the constants `kFeatureSliceCount` and `kFeatureSliceSize`. Ensure `feature_provider` is generating features that match these dimensions.
 
-## 5. No Audio Data / Failed Initialization
+## 7. No Audio Data / Failed Initialization
 
-**Issue:** The `PopulationFeatureData` function in `feature_provider.cc` consistently receives no new slices, or the application logs errors related to I2S initialization:
+**Issue:**
+The `PopulationFeatureData` function in `feature_provider.cc` consistently receives no new slices, or the application logs errors related to I2S initialization:
 ```bash
 ... (previous boot messages) ...
 I (150) main_task: App framework initialized.
@@ -131,9 +162,10 @@ E (1210) main_task: Error during TFLM loop setup or first run. Halting or restar
 ```
 This issue can be fixed by checking the I2S pin definitions within `audio_provider.cc` against the [ESP32-S3-EYE schematic/datasheet](https://dl.espressif.com/dl/schematics/SCH_ESP32-S3-EYE-MB_20211201_V2.2.pdf) for the onboard microphone (BCK, WS/LRCLK, DIN/SDIN).
 
-## 6. Build Fails After Adding USB Host Dependencies (C++ Exceptions)
+## 8. Build Fails After Adding USB Host Dependencies (C++ Exceptions)
 
-**Issue:** After adding the USB Host dependencies (from Henry's original project) to this project's `idf_component.yml` and adding `USBHostSerial.cpp`/`.h`, the build failed while compiling the USB VCP components.
+**Issue:**
+After adding the USB Host dependencies (from Henry's original project) to this project's `idf_component.yml` and adding `USBHostSerial.cpp`/`.h`, the build failed while compiling the USB VCP components.
 ```bash
 In static member function 'static CdcAcmDevice* esp_usb::VCP::open(uint16_t, uint16_t, const cdc_acm_host_device_config_t*, uint8_t)':
 error: exception handling disabled, use '-fexceptions' to enable
@@ -148,9 +180,10 @@ ninja: build stopped: subcommand failed.
 ```
 This issue can be fixed by enabling C++ exceptions, which are disabled by default. Run `idf.py menuconfig`, and enable `Compiler Options` -> `Enable C++ Exceptions`. Save the file and run `idf.py build` or `idf.py reconfigure`.
 
-## 7. Linker Error (Windows System Libraries)
+## 9. Linker Error (Windows System Libraries)
 
-**Issue:** The build fails during toolchain configuration/environment setup with a linker error:
+**Issue:**
+The build fails during toolchain configuration/environment setup with a linker error:
 ```bash
 FAILED: cmTC_d61b0.exe
     C:\WINDOWS\system32\cmd.exe /C "cd . && C:\Espressif\tools\esp-clang\16.0.1-fe4f10a809\esp-clang\bin\clang.exe   CMakeFiles/cmTC_d61b0.dir/testCCompiler.c.obj -o cmTC_d61b0.exe -Wl,--out-implib,libcmTC_d61b0.dll.a -Wl,--major-image-version,0,--minor-image-version,0  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
@@ -180,9 +213,10 @@ FAILED: cmTC_d61b0.exe
 ```
 This issue can be fixed by verifying your current working directory. If you are in the `C:\Espressif\frameworks\esp-idf-v5.3.2>` directory, you need to navigate into your project directory (`cd Elegoo-AI-Robot`), and try building again. If it still fails, run `idf.py set-target esp32s3` instead of building. 
 
-## 7.1. Linker Error (Undefined Reference)
+## 9.1. Linker Error (Undefined Reference)
 
-**Issue:** The build failed during linking with an `undefined reference to 'usbSerial'` error when processing `command_responder.cc.obj`:
+**Issue:** 
+The build failed during linking with an `undefined reference to 'usbSerial'` error when processing `command_responder.cc.obj`:
 ```bash
 FAILED: micro_speech.elf
 C:\WINDOWS\system32\cmd.exe /C "cd . && C:\Espressif\tools\xtensa-esp-elf\esp-13.2.0_20240530\xtensa-esp-elf\bin\xtensa-esp32s3-elf-g++.exe ... @CMakeFiles\micro_speech.elf.rsp -o micro_speech.elf && cd ."
@@ -192,9 +226,10 @@ ninja: build stopped: subcommand failed.
 ```
 This issue can be fixed by moving the `UBSHostSerial usbSerial;` declaration outside the anonymous namespace in `main_functions.cc`, to give it external linkage.
 
-## 8. Fullclean Error
+## 10. Fullclean Error
 
-**Issue:** When attempting to clean build files and managed components from the project directory, you may encounter this fullclean error (or similar):
+**Issue:**
+When attempting to clean build files and managed components from the project directory, you may encounter this fullclean error (or similar):
 ```bash
 C:\Espressif\frameworks\esp-idf-v5.3.2\Elegoo-AI-Robot> idf.py fullclean
 Executing action: fullclean
@@ -238,3 +273,7 @@ This project is based on Henry Tran's [Elegoo-AI-Robot](https://github.com/henry
 Thanks to **bertmelis** for the [USBHostSerial code](https://github.com/bertmelis/USBHostSerial).
 
 Thanks to **Espressif** for the [ESP32 SDK](https://github.com/espressif/esp-idf).
+
+### Analysis & Personal Thoughts about the Project
+
+Overall, the project taught me a lot of troubleshooting, debugging, and documentation skills. I wish I could've implemented the original functionality planned for this project, but consistent hardware failures led me in circles. The known issues above, especially the ones with no fixes or workarounds, placed constraints on the project vision and ultimately took precious time from reaching a working state. I still believe this CAN be solved, given enough time or a fresh set of eyes. I appreciate my time working on this and hope to see it in a working state sometime soon. Thank you for reading until the end!
