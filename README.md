@@ -37,13 +37,11 @@ All dependencies have been already added to [idf_component.yml](https://github.c
   - [Silicon Labs CP210x USB-UART converter driver](https://components.espressif.com/components/espressif/usb_host_cp210x_vcp/versions/2.0.0)
   - [FTDI UART-USB converters driver](https://components.espressif.com/components/espressif/usb_host_ftdi_vcp/versions/2.0.0)
 
----
-
-# Getting Started
+## Getting Started
 
 Getting started involves following some instructions detailed in [Henry Tran's repository](https://github.com/henrytran720/Elegoo-AI-Robot) to assemble and prepare the Elegoo Robot car. After completing the steps listed in [The basics](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#the-basics) and [Assembly](https://github.com/henrytran720/Elegoo-AI-Robot?tab=readme-ov-file#assembly), you are ready to proceed to setup.
 
-## Setup and Flashing
+### Setup and Flashing
 
 The setup process is very similar to Henry's. Start by opening your ESP-IDF environment, and cloning my repository:
 ```bash
@@ -62,15 +60,13 @@ Once the project finishes building, you are now ready to flash the project to th
 # (e.g., idf.py flash -p COM4 on Windows, or /dev/ttyS4 on Linux/WSL)
 idf.py flash
 ```
-Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the Micro USB to Micro USB OTG cable. This is the completed flashing and setup process. You may now turn on the car and see if it works. Say "yes", and the car will drive forwards. Say "no" and the car will stop. These voice commands and responses to commands may be expanded on or changed, but it will require core project file modifications to function.
+Once the flashing process completes, you can unplug the ESP32 and plug it in to the serial adapter using the Micro USB to Micro USB OTG cable. This is the completed flashing/setup process and the final product. You may now turn on the car and see if it works. Say "yes", and the car will drive forwards. Say "no" and the car will stop. These voice commands and responses to commands may be expanded on or changed, but it will require core project file modifications to function.
 
----
-
-# Troubleshooting Known Issues (WIP)
+## Troubleshooting Known Issues (WIP)
 
 This project ran into many issues throughout development. The current state is NOT a working build. Below is a list of known issues, and how to troubleshoot them.
 
-## 1. No Camera Feedback Displayed After Flashing
+### 1. No Camera Feedback Displayed After Flashing
 
 **Issue:**
 After flashing the project to the ESP32-S3-EYE, you may notice the camera feedback no longer displaying on the LCD screen, given you are using an LCD module. This is expected and not harmful to the device. If you would like to restore this functionality, you will have to erase the flash and upload the default firmware to the device. Thankfully, Espressif provides a [software tool](https://docs.espressif.com/projects/esp-test-tools/en/latest/esp32/production_stage/tools/flash_download_tool.html) that makes the process quick and simple. 
@@ -86,7 +82,7 @@ After flashing the project to the ESP32-S3-EYE, you may notice the camera feedba
 
 This fix applies to issue number two as well.
 
-## 2. No Virtual COM Port After Flashing
+### 2. No Virtual COM Port After Flashing
 
 **Issue:**
 After flashing the project to the ESP32-S3-EYE, you may notice the microcontroller is no longer recognized by your PC and thus no virtual COM port opens for you to connect to:
@@ -97,7 +93,7 @@ No serial ports found. Connect a device, or use '-p PORT' option to set a specif
 ```
 To fix this, you have two options. Either refer to the solution in issue number one and reupload the default firmware, or put the device into download mode (seen above). These are currently the ONLY known workarounds for this issue. This issue also means you CANNOT monitor the serial output (`idf.py monitor`) after flashing the project to the device. More details are in issue number three.
 
-## 3. Debugging Limitations Due to USB Port Usage
+### 3. Debugging Limitations Due to USB Port Usage
 
 **Issue:**
 Standard real-time serial debugging (e.g., viewing ESP_LOG output via USB CDC) is unavailable after flashing. The ESP32-S3-EYE's USB port is configured in Host mode to communicate with the CP2102x serial adapter, precluding its use as a Device (CDC) for PC monitoring. Attempting to run `idf.py monitor` while connected to a PC results in a vague `ClearCommError` message:
@@ -106,7 +102,7 @@ Error: ClearCommError failed (PermissionError(13, 'The device does not recognize
 ```
 There is NO known fix for this, and there are NO known workarounds. Do NOT attempt to monitor the serial output once the device initializes USBHost mode. ONLY flash the code using `idf.py flash`. While this is quite a limiting error, encountering it will not break anything, you will simply be unable to debug the program. The hardware configuration requires the USB port to be used for host functionality. Simultaneous device-mode debugging is IMPOSSIBLE without additional hardware (e.g., UART adapter on separate pins). You may attempt to debug using alternative methods, like visual feedback (from the LED GPIO) or inferring the state from the car's behavior, which may net varied results.
 
-## 4. OpResolver Template Argument Missing
+### 4. OpResolver Template Argument Missing
 
 **Issue:**
 A `class template argument deduction failed` error occurred on the `tflite::MicroMutableOpResolver` declaration. Sometimes, the required template argument specifying the number of operators to be registered can be missing, if not added in manually:
@@ -121,7 +117,7 @@ note:   candidate expects 1 argument, 0 provided
 This issue can be fixed by finding the line in `main/main_functions.cc` that reads: `static tflite::MicroMutableOpResolver micro_op_resolver;`
 And changing it to: `static tflite::MicroMutableOpResolver<4> micro_op_resolver;` (or however many operators your model uses).
 
-## 5. Interpreter Allocation Failure
+### 5. Interpreter Allocation Failure
 
 **Issue:** 
 The program logs `AllocateTensors() failed` during setup:
@@ -136,14 +132,14 @@ E (1190) main_task: Failed to initialize TensorFlow Lite Micro. Halting.
 ```
 This issue can be fixed by checking the value of `kTensorArenaSize` in `main_functions.cc`. The default `micro_speech` model requires roughly 10-15 KB, but custom models or additional operations might need more. Verify is PSRAM is disabled in `idf.py menuconfig`. Check the list of operators added to `TFLMOpResolver` in `main_functions.cc`. If an operation required by the model is missing, allocation can fail. Add the operation to the list and modify the `<>` value in the declaration line. 
 
-## 6. Model Input Tensor Mismatch
+### 6. Model Input Tensor Mismatch
 
 **Issue:**
 The program logs `Bad input tensor parameters in model` during setup, or inference produces nonsense results. 
 
 This issue can be fixed by verifying the expected input tensor shape, size, and type (`kTfLiteInt8`) in `main_functions.cc::setup()` against the model's requirements. Check the constants `kFeatureSliceCount` and `kFeatureSliceSize`. Ensure `feature_provider` is generating features that match these dimensions.
 
-## 7. No Audio Data / Failed Initialization
+### 7. No Audio Data / Failed Initialization
 
 **Issue:**
 The `PopulationFeatureData` function in `feature_provider.cc` consistently receives no new slices, or the application logs errors related to I2S initialization:
@@ -162,7 +158,7 @@ E (1210) main_task: Error during TFLM loop setup or first run. Halting or restar
 ```
 This issue can be fixed by checking the I2S pin definitions within `audio_provider.cc` against the [ESP32-S3-EYE schematic/datasheet](https://dl.espressif.com/dl/schematics/SCH_ESP32-S3-EYE-MB_20211201_V2.2.pdf) for the onboard microphone (BCK, WS/LRCLK, DIN/SDIN).
 
-## 8. Build Fails After Adding USB Host Dependencies (C++ Exceptions)
+### 8. Build Fails After Adding USB Host Dependencies (C++ Exceptions)
 
 **Issue:**
 After adding the USB Host dependencies (from Henry's original project) to this project's `idf_component.yml` and adding `USBHostSerial.cpp`/`.h`, the build failed while compiling the USB VCP components.
@@ -180,7 +176,7 @@ ninja: build stopped: subcommand failed.
 ```
 This issue can be fixed by enabling C++ exceptions, which are disabled by default. Run `idf.py menuconfig`, and enable `Compiler Options` -> `Enable C++ Exceptions`. Save the file and run `idf.py build` or `idf.py reconfigure`.
 
-## 9. Linker Error (Windows System Libraries)
+### 9. Linker Error (Windows System Libraries)
 
 **Issue:**
 The build fails during toolchain configuration/environment setup with a linker error:
@@ -213,7 +209,7 @@ FAILED: cmTC_d61b0.exe
 ```
 This issue can be fixed by verifying your current working directory. If you are in the `C:\Espressif\frameworks\esp-idf-v5.3.2>` directory, you need to navigate into your project directory (`cd Elegoo-AI-Robot`), and try building again. If it still fails, run `idf.py set-target esp32s3` instead of building. 
 
-## 9.1. Linker Error (Undefined Reference)
+### 9.1. Linker Error (Undefined Reference)
 
 **Issue:** 
 The build failed during linking with an `undefined reference to 'usbSerial'` error when processing `command_responder.cc.obj`:
@@ -226,7 +222,7 @@ ninja: build stopped: subcommand failed.
 ```
 This issue can be fixed by moving the `UBSHostSerial usbSerial;` declaration outside the anonymous namespace in `main_functions.cc`, to give it external linkage.
 
-## 10. Fullclean Error
+### 10. Fullclean Error
 
 **Issue:**
 When attempting to clean build files and managed components from the project directory, you may encounter this fullclean error (or similar):
@@ -239,8 +235,6 @@ If you want to keep the changes, you can move the directory with the component t
 ```
 This issue can be fixed by manually deleting the `build` and `managed_components` folders from your project, and running `idf.py fullclean` once again.
 
----
-
 ## Potential Issues
 
 **Task Starvation/Timing:** The USB Host task might still be preempted or delayed by higher-priority or CPU-intensive audio processing and inference tasks, leading to failed USB transmissions.
@@ -249,16 +243,18 @@ This issue can be fixed by manually deleting the `build` and `managed_components
 
 **Other Possibilities:** Failure during CDC control transfers (e.g., setting line coding), subtle bugs in the `USBHostSerial` wrapper, and intermittent hardware issues could be other causes for failure.
 
-## Future Work / Debugging Steps
+### Future Work / Debugging Steps
 
 1. Utilize alternative debugging (second serial adapter) to visualize task execution and USB timings.
 2. Simplify the project (remove audio/TFLM temporarily) to test USB communication in isolation.
 3. Conduct a line-by-line comparison of the `USBHostSerial` wrapper against official ESP-IDF USB Host examples.
 4. Analyze differences between the full `sdkconfig` files from both projects.
 
----
+## Analysis & Personal Thoughts
 
-## License
+Overall, the project taught me a lot of troubleshooting, debugging, and documentation skills. I wish I could've implemented the original functionality planned for this project, but consistent hardware failures led me in circles. The known issues above, especially the ones with no fixes or workarounds, placed constraints on the project vision and ultimately took precious time from reaching a working state. I still believe this CAN be solved, given enough time or a fresh set of eyes. I appreciate my time working on this and hope to see it in a working state sometime soon. Thank you for reading until the end!
+
+### License
 
 TensorFlow and Espressif's sample code is covered by the Apache 2.0 license.
 
@@ -266,14 +262,10 @@ bertmelis' USBHostSerial code is covered by the MIT license.
 
 Modifications made to both codebases for this project are also covered by the included MIT license.
 
-## Credits
+### Credits
 
 This project is based on Henry Tran's [Elegoo-AI-Robot](https://github.com/henrytran720/Elegoo-AI-Robot). Special thanks to **Henry Tran** for his work on the original code.
 
 Thanks to **bertmelis** for the [USBHostSerial code](https://github.com/bertmelis/USBHostSerial).
 
 Thanks to **Espressif** for the [ESP32 SDK](https://github.com/espressif/esp-idf).
-
-### Analysis & Personal Thoughts about the Project
-
-Overall, the project taught me a lot of troubleshooting, debugging, and documentation skills. I wish I could've implemented the original functionality planned for this project, but consistent hardware failures led me in circles. The known issues above, especially the ones with no fixes or workarounds, placed constraints on the project vision and ultimately took precious time from reaching a working state. I still believe this CAN be solved, given enough time or a fresh set of eyes. I appreciate my time working on this and hope to see it in a working state sometime soon. Thank you for reading until the end!
